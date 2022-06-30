@@ -1,0 +1,40 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: posts_path
+          uri: https://jsonplaceholder.typicode.com
+          predicates:
+            - Path=/api/posts
+            - Method=GET,POST
+          filters:
+          - RewritePath=/api/posts, /posts
+
+        - id: posts_with_path_param
+          uri: https://jsonplaceholder.typicode.com
+          predicates:
+            - Path=/posts/{id}
+            - Method=GET
+
+        - id: posts_with_path_param_and_path
+          uri: https://jsonplaceholder.typicode.com
+          predicates:
+            - Path=/posts/{id}/comments
+            - Method=GET
+
+        - id: posts_with_path_param_and_path
+          uri: https://jsonplaceholder.typicode.com
+          predicates:
+            - Path=/comments
+            - Query=postId
+            - Method=GET
+
+        - id: all_posts_path
+          uri: https://jsonplaceholder.typicode.com
+          predicates:
+            - Path=/posts/**
